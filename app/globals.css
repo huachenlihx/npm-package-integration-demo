@@ -1,0 +1,261 @@
+* {
+  box-sizing:border-box}
+
+body {
+  margin:0;
+  background:#f4f7fc;
+  color:#16243d;
+  font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+a {
+  color:#3b55bb}
+
+button,input,textarea,select {
+  font:inherit}
+
+button {
+  cursor:pointer;
+  border:0;
+  border-radius:10px;
+  background:#5268d6;
+  color:white;
+  padding:11px 16px;
+  font-weight:650}
+
+button:hover {
+  filter:brightness(.95)}
+
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible {
+  outline:3px solid #e88f29;
+  outline-offset:3px}
+
+.shell {
+  max-width:1100px;
+  margin:auto;
+  padding:28px 20px}
+
+.hero {
+  background:linear-gradient(125deg,#122952,#394ac2 70%,#7b48c1);
+  color:white;
+  border-radius:20px;
+  padding:36px}
+
+.hero h1 {
+  font-size:clamp(1.7rem,4vw,2.8rem);
+  line-height:1.2;
+  margin:8px 0}
+
+.hero p {
+  opacity:.9}
+
+.kicker {
+  font-size:.78rem;
+  letter-spacing:.17em;
+  font-weight:750}
+
+.chips {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap}
+
+.chips span {
+  padding:5px 12px;
+  background:#ffffff25;
+  border:1px solid #ffffff55;
+  border-radius:99px;
+  font-size:.85rem}
+
+.tabs {
+  display:flex;
+  gap:10px;
+  padding:22px 0}
+
+.tabs button {
+  background:white;
+  color:#30456d;
+  border:1px solid #d6deef}
+
+.tabs button[aria-pressed=true] {
+  background:#3853cc;
+  color:white}
+
+.card {
+  background:white;
+  border:1px solid #e1e7f1;
+  padding:26px;
+  border-radius:18px;
+  box-shadow:0 12px 28px #182d4910}
+
+.sectionHeader {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px}
+
+.sectionHeader h2 {
+  margin:0}
+
+.hint {
+  font-size:.9rem;
+  color:#4c5d77}
+
+.row {
+  display:flex;
+  align-items:end;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:18px 0}
+
+.grow {
+  flex:1;
+  min-width:220px}
+
+label {
+  display:block;
+  font-weight:600}
+
+label input:not([type=file]),select,textarea {
+  display:block;
+  width:100%;
+  margin-top:6px;
+  border:1px solid #aebdd3;
+  border-radius:9px;
+  padding:10px;
+  color:#152a48;
+  background:white}
+
+textarea {
+  font-family:ui-monospace,monospace}
+
+.subtle {
+  background:#e9edff;
+  color:#283d8c}
+
+.upload input {
+  display:block;
+  font-size:.9rem}
+
+.viewer {
+  min-height:560px;
+  height:min(77vh,780px);
+  border:1px solid #d5ddeb;
+  border-radius:12px;
+  overflow:auto;
+  background:#f3f5fa;
+  padding:6px}
+
+.viewer>div {
+  min-height:100%}
+
+.captchaHost {
+  margin:20px 0;
+  padding:22px;
+  min-height:135px;
+  border:1px dashed #9aadd1;
+  border-radius:12px}
+
+.error,[role=alert] {
+  color:#9d2435}
+
+.between {
+  justify-content:space-between}
+
+.log {
+  background:#10203b;
+  color:#ebf0ff;
+  border-radius:10px;
+  padding:14px;
+  max-height:250px;
+  overflow:auto;
+  font:13px/1.7 ui-monospace,monospace;
+  overflow-wrap:anywhere}
+
+.log time {
+  color:#a9c2f8}
+
+footer {
+  text-align:center;
+  color:#5b6880;
+  padding:25px 0}
+
+@media(max-width:600px) {
+  .hero,.card {
+  padding:20px}
+
+.viewer {
+  height:65vh}
+
+.row button {
+  width:100%}
+
+}
+
+/* WCAG-oriented keyboard and contrast improvements */
+.accessibilityNotice {
+  color: #293d65;
+  background: #eef3ff;
+  border-left: 4px solid #3853cc;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.viewer:focus-visible,
+.log:focus-visible {
+  outline: 3px solid #b45b00;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* PDF.js viewer layout.
+   The npm component renders a <section> containing page controls,
+   #pdf-container, and a <nav> with Prev/Next/First/Last buttons.
+   Only the PDF canvas container scrolls; navigation stays visible. */
+.viewer {
+  overflow: hidden;
+}
+
+.viewer > section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.viewer #pdf-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.viewer nav[aria-label="PDF page navigation"] {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  background: #f3f5fa;
+  border-top: 1px solid #d5ddeb;
+}
+
+.viewer #pdf-container:focus-visible {
+  outline: 3px solid #b45b00;
+  outline-offset: -3px;
+}
