@@ -259,3 +259,19 @@ button:disabled {
   outline: 3px solid #b45b00;
   outline-offset: -3px;
 }
+
+/* Pagination package demo: responsive data table and native pagination controls. */
+.tabs { flex-wrap: wrap; }
+.tableScroll { overflow-x: auto; border: 1px solid #d5ddeb; border-radius: 12px; }
+.tableScroll:focus-visible { outline: 3px solid #b45b00; outline-offset: 3px; }
+.recordsTable { width: 100%; border-collapse: collapse; min-width: 490px; }
+.recordsTable th, .recordsTable td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #e1e7f1; }
+.recordsTable th { background: #edf2ff; color: #223659; }
+.recordsTable tbody tr:last-child td { border-bottom: 0; }
+.recordsTable tbody tr:nth-child(even) { background: #f8faff; }
+.paginationControls { margin-top: 18px; }
+.paginationControls nav { align-items: center; }
+.paginationControls nav > div { flex-wrap: wrap; }
+.paginationControls button { padding: 8px 12px; }
+.paginationControls select { width: auto; min-width: 66px; margin-top: 0; padding: 7px; }
+@media (max-width: 600px) { .paginationControls nav > div { gap: 6px; } }

@@ -17,7 +17,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "form_recaptcha": "latest",
-    "pdfjs-embed-viewer": "latest"
+    "pdfjs-embed-viewer": "latest",
+    "pagination-dropdown-select": "1.0.10"
   },
   "devDependencies": {
     "typescript": "^5.9.0",

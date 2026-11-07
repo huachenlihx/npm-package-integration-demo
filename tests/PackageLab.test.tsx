@@ -16,6 +16,41 @@ vi.mock('form_recaptcha', () => ({
   ),
 }));
 
+vi.mock('pagination-dropdown-select', () => ({
+  default: ({ pageSizeArray, totalResultsNumber, pageSize, setPageSize, currentPage, setCurrentPage, ariaLabel }: {
+    pageSizeArray: number[];
+    totalResultsNumber: number;
+    pageSize: number;
+    setPageSize: (value: number) => void;
+    currentPage: number;
+    setCurrentPage: (value: number) => void;
+    ariaLabel: string;
+  }) => {
+    const totalPages = Math.max(1, Math.ceil(totalResultsNumber / pageSize));
+    return (
+      <nav aria-label={ariaLabel}>
+        <label>Per page
+          <select aria-label="Results per page" value={pageSize} onChange={(event) => {
+            setPageSize(Number(event.target.value));
+            setCurrentPage(1);
+          }}>
+            {pageSizeArray.map((value) => <option key={value} value={value}>{value}</option>)}
+          </select>
+        </label>
+        <button type="button" disabled={currentPage === 1} onClick={() => setCurrentPage(1)}>First</button>
+        <button type="button" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>
+        <label>Page
+          <select aria-label="Current page" value={currentPage} onChange={(event) => setCurrentPage(Number(event.target.value))}>
+            {Array.from({ length: totalPages }, (_, index) => <option key={index} value={index + 1}>{index + 1}</option>)}
+          </select>
+        </label>
+        <button type="button" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+        <button type="button" disabled={currentPage === totalPages} onClick={() => setCurrentPage(totalPages)}>Last</button>
+      </nav>
+    );
+  },
+}));
+
 describe('npm package integration lab', () => {
   it('defaults to the PDF viewer and loads the bundled PDF', async () => {
     render(<PackageLab />);
@@ -69,4 +104,27 @@ describe('npm package integration lab', () => {
     await waitFor(() => expect(captchaTab).toHaveAttribute('aria-pressed', 'true'));
     expect(screen.getByRole('heading', { name: 'Canvas CAPTCHA' })).toBeInTheDocument();
   });
+
+  it('paginates 87 records, changes page size and resets page on search', async () => {
+    const user = userEvent.setup();
+    render(<PackageLab />);
+    await user.click(screen.getByRole('button', { name: 'Pagination & dropdown' }));
+    expect(screen.getByRole('heading', { name: 'Pagination Dropdown Select' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Sample records pagination' })).toBeInTheDocument();
+    expect(screen.getByText('Showing 1–10 of 87 matching records')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText('Showing 11–20 of 87 matching records')).toBeInTheDocument();
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Results per page' }), '20');
+    expect(screen.getByText('Showing 1–20 of 87 matching records')).toBeInTheDocument();
+    await user.type(screen.getByRole('searchbox', { name: 'Search sample records' }), 'record 025');
+    expect(screen.getByText('Showing 1–1 of 1 matching records')).toBeInTheDocument();
+    expect(screen.getByText('Sample record 025')).toBeInTheDocument();
+    await user.clear(screen.getByRole('searchbox', { name: 'Search sample records' }));
+    await user.type(screen.getByRole('searchbox', { name: 'Search sample records' }), 'not-a-record');
+    expect(screen.getByText('Showing 0–0 of 0 matching records')).toBeInTheDocument();
+    expect(screen.getByText('No matching records. Try a different search.')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Reset example' }));
+    expect(screen.getByText('Showing 1–10 of 87 matching records')).toBeInTheDocument();
+  });
+
 });

@@ -2,6 +2,7 @@
 
 import { createElement, useEffect, useRef, useState } from 'react';
 import type { ComponentType } from 'react';
+import PaginationDemo from './PaginationDemo';
 
 type Notice = {
   when: string;
@@ -38,7 +39,7 @@ function isComponent(value: unknown): boolean {
 }
 
 export default function PackageLab() {
-  const [tab, setTab] = useState<'pdf' | 'captcha'>('pdf');
+  const [tab, setTab] = useState<'pdf' | 'captcha' | 'pagination'>('pdf');
 
   const [viewer, setViewer] = useState<ComponentType<PdfViewerProps> | null>(null);
   const [viewerError, setViewerError] = useState('');
@@ -196,10 +197,11 @@ export default function PackageLab() {
       <header className="hero">
         <p className="kicker">REACT 19 · NEXT.JS APP ROUTER</p>
         <h1>npm Package Integration Lab</h1>
-        <p>Test two published packages in a real browser-based Next.js application.</p>
+        <p>Test three published packages in a real browser-based Next.js application.</p>
         <div className="chips">
           <span>form_recaptcha</span>
           <span>pdfjs-embed-viewer</span>
+          <span>pagination-dropdown-select</span>
         </div>
       </header>
 
@@ -217,6 +219,13 @@ export default function PackageLab() {
           onClick={() => setTab('captcha')}
         >
           Canvas CAPTCHA
+        </button>
+        <button
+          type="button"
+          aria-pressed={tab === 'pagination'}
+          onClick={() => setTab('pagination')}
+        >
+          Pagination &amp; dropdown
         </button>
       </nav>
 
@@ -393,6 +402,23 @@ export default function PackageLab() {
           ) : (
             <p role="status">Loading CAPTCHA package…</p>
           )}
+        </section>
+      )}
+
+      {tab === 'pagination' && (
+        <section className="card" aria-labelledby="pagination-heading">
+          <div className="sectionHeader">
+            <h2 id="pagination-heading">Pagination Dropdown Select</h2>
+            <a href="https://www.npmjs.com/package/pagination-dropdown-select" target="_blank" rel="noreferrer">
+              npm package
+            </a>
+          </div>
+          <p className="hint">
+            Uses the package&apos;s documented default <code>Pagination</code> export
+            with controlled <code>currentPage</code> and <code>pageSize</code> state.
+            The records below are a demonstration dataset, filtered and sliced in the client.
+          </p>
+          <PaginationDemo />
         </section>
       )}
 

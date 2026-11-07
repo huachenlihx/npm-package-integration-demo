@@ -15,6 +15,10 @@ vi.mock('form_recaptcha', () => ({
   default: () => <div aria-label="Mock visual challenge">CAPTCHA mock</div>,
 }));
 
+vi.mock('pagination-dropdown-select', () => ({
+  default: () => <nav aria-label="Sample records pagination"><button type="button">Next page</button></nav>,
+}));
+
 describe('automated accessibility checks', () => {
   it('finds no axe violations in the PDF demo wrapper', async () => {
     const { container } = render(<PackageLab />);
@@ -29,4 +33,12 @@ describe('automated accessibility checks', () => {
     await screen.findByText('CAPTCHA mock');
     expect(await axe(container)).toHaveNoViolations();
   });
+
+  it('finds no axe violations in the pagination demo wrapper', async () => {
+    const user = userEvent.setup();
+    const { container } = render(<PackageLab />);
+    await user.click(screen.getByRole('button', { name: 'Pagination & dropdown' }));
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
 });

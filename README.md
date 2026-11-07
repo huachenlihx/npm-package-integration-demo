@@ -1,9 +1,10 @@
-# Next.js Integration Demo — `form_recaptcha` + `pdfjs-embed-viewer`
+# Next.js Integration Demo — Three npm Packages
 
-This is a **Next.js 16 App Router + React 19 + TypeScript** integration test application for two npm packages:
+This is a **Next.js 16 App Router + React 19 + TypeScript** integration test application for three npm packages:
 
 - [form_recaptcha](https://www.npmjs.com/package/form_recaptcha) — canvas CAPTCHA package
 - [pdfjs-embed-viewer](https://www.npmjs.com/package/pdfjs-embed-viewer) — embedded PDF.js viewer
+- [pagination-dropdown-select](https://www.npmjs.com/package/pagination-dropdown-select) — accessible pagination and page-size dropdowns
 
 ## Requirements
 
@@ -56,6 +57,20 @@ const [codeValue, setCodeValue] = useState('');
 
 The first demo incorrectly rendered the package via a generic prop inspector (with a placeholder `length` prop and invented callbacks). The actual package requires `codeValue: string` and `setCodeValue: (value: string) => void`. This corrected demo provides both.
 
+## Demo 3 — Pagination Dropdown Select
+
+Select **Pagination & dropdown** to use the **actual published** `pagination-dropdown-select` package (version `1.0.10`) in a Next.js Client Component. The demo uses 87 sample records and includes a searchable table.
+
+1. Change **Results per page** (5, 10, 20, or 50) and verify the table updates and returns to page 1.
+2. Use **First**, **Previous**, **Next**, **Last**, or the **Current page** dropdown.
+3. Search for `orders`, `pending`, or `record 025`: the results and count update, and pagination resets to page 1.
+4. Search for something nonexistent to check the empty state, then click **Reset example**.
+5. Test the controls with the keyboard and a screen reader, including the navigation label and visible focus states.
+
+The integration is in `components/PaginationDemo.tsx` and imports `Pagination` as the package's default export. The package itself is not copied or modified. It receives controlled `currentPage`, `setCurrentPage`, `pageSize`, `setPageSize`, `pageSizeArray`, `totalResultsNumber`, and `ariaLabel` props. Filtering and slicing the client-side sample array are performed by the demo, not the library.
+
+For server-side pagination, fetch records whenever the page or page size changes and pass the server's **total** result count to `totalResultsNumber`.
+
 ## Production build test
 
 ```bash
@@ -74,7 +89,7 @@ Visit the local URL printed by Next.js. `npm start` runs the Next.js production 
 | CAPTCHA displays nothing | Check the browser console and `npm ls form_recaptcha`; verify the published package matches the documented controlled API. |
 | PDF is blank | Check browser console / Network for PDF.js worker errors. Try the bundled sample first. |
 | Remote PDF fails | Check browser CORS / authentication settings; use a same-origin file or local upload. |
-| Next.js SSR error | Keep both library imports inside browser-only effects/client components. |
+| Next.js SSR error | Keep browser-specific library imports inside client-side effects/components. Pagination uses a standard Client Component import. |
 | Port 3000 in use | Run `npm run dev -- -p 3001`. |
 
 ## Manual verification checklist
@@ -85,6 +100,8 @@ Visit the local URL printed by Next.js. `npm start` runs the Next.js production 
 - [ ] Multi-page navigation and zoom work
 - [ ] Local PDF upload works
 - [ ] Canvas CAPTCHA renders with the controlled `codeValue`/`setCodeValue` props
+- [ ] Pagination: page dropdown, first/previous/next/last, and page-size controls work
+- [ ] Pagination: search, empty state, reset, and record counts work
 - [ ] CAPTCHA renders and regenerates a challenge
 - [ ] Demo-only answer comparison and New Captcha refresh work
 - [ ] Keyboard, screen reader, and mobile layout checked
@@ -93,9 +110,10 @@ Visit the local URL printed by Next.js. `npm start` runs the Next.js production 
 ## Package inspection commands
 
 ```bash
-npm ls next react form_recaptcha pdfjs-embed-viewer
+npm ls next react form_recaptcha pdfjs-embed-viewer pagination-dropdown-select
 cat node_modules/form_recaptcha/package.json
 cat node_modules/pdfjs-embed-viewer/package.json
+cat node_modules/pagination-dropdown-select/package.json
 ```
 
 If you maintain both package repositories, you can use this demo to test newly published versions simply by reinstalling and refreshing the lockfile.
@@ -109,6 +127,7 @@ app/
   page.tsx
 components/
   PackageLab.tsx
+  PaginationDemo.tsx
 public/
   sample.pdf
 README.md
@@ -122,7 +141,7 @@ No credentials or backend are required.
 
 ## Status
 
-The project source and sample PDF are provided; **npm dependency installation, Next.js compilation and browser behavior were not executed in the artifact-generation environment**. Please run the commands above to verify against the actual npm releases.
+The project source and sample PDF are provided; **npm package installation, Next.js compilation, and browser behavior could not be executed in this environment because the npm registry is unreachable**. The package dependency and lockfile entries are recorded for version 1.0.10, but the lockfile entry for this new package has no registry integrity hash. Run `npm install` on a network-connected computer to refresh the lockfile metadata before committing it. Please run the commands above to verify against the actual npm releases.
 
 
 ## Unit tests and accessibility
@@ -139,9 +158,9 @@ npm run lint
 npm run build
 ```
 
-The unit tests mock the external npm components to isolate the demo's integration behavior. They do **not** prove the published packages themselves work correctly. Run the app in Chrome, test both real packages manually, and check the browser Console.
+The unit tests mock the external npm components to isolate the demo's integration behavior. They do **not** prove the published packages themselves work correctly. Run the app in Chrome, test all three real packages manually, and check the browser Console.
 
-The `jest-axe` tests scan the demo wrapper in two states, with mocked package content. This is **not** WCAG conformance certification and does not validate the internals of the actual PDF viewer or CAPTCHA. Use axe DevTools on the real running app and perform keyboard, VoiceOver, focus, zoom, and responsive testing.
+The `jest-axe` tests scan the demo wrapper in two states, with mocked package content. This is **not** WCAG conformance certification and does not validate the internals of the actual PDF viewer, CAPTCHA, or pagination component. Use axe DevTools on the real running app and perform keyboard, VoiceOver, focus, zoom, and responsive testing.
 
 ### Accessibility enhancements
 
